@@ -43,7 +43,7 @@ changelog:
       - '^docs:'
       - '^test:'
 
-homebrew:
+brews:
   - repository:
       owner: estran-studio
       name: homebrew-tap
