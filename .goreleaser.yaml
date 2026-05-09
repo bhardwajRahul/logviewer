@@ -19,7 +19,6 @@ builds:
 
 archives:
   - id: default
-    # this name template makes the tarballs look like logviewer_Linux_x86_64.tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -34,19 +33,6 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 
-# Sign artifacts with Cosign (OIDC-based signing)
-signs:
-  - cmd: cosign
-    certificate: '${artifact}.pem'
-    args:
-      - sign-blob
-      - '--output-certificate=${certificate}'
-      - '--output-signature=${signature}'
-      - '${artifact}'
-      - "--yes"
-    artifacts: checksum
-    output: true
-
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
 
@@ -57,7 +43,7 @@ changelog:
       - '^docs:'
       - '^test:'
 
-brews:
+homebrew:
   - repository:
       owner: estran-studio
       name: homebrew-tap
@@ -69,7 +55,6 @@ scoops:
       owner: estran-studio
       name: scoop-bucket
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-
     homepage: "https://github.com/estran-studio/logviewer"
     description: "CLI log client for multiple sources (Splunk, K8s, Docker, etc)"
     license: "GPL-3.0-or-later"
@@ -81,15 +66,9 @@ aurs:
     maintainers:
       - "wquintal <williamquintal95@gmail.com>"
     license: "GPL-3.0-or-later"
-    
     git_url: "ssh://aur@aur.archlinux.org/logviewer-bin.git"
-    
     private_key: "{{ .Env.AUR_KEY }}"
-    
     package: |-
-      # bin is simply installed to /usr/bin
       install -Dm755 "./logviewer" "${pkgdir}/usr/bin/logviewer"
-      
-      # Install license and readme
       install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
       install -Dm644 "./README.md" "${pkgdir}/usr/share/doc/${pkgname}/README.md"
