@@ -113,6 +113,7 @@ integration/start:
 	@bash integration/infra/ssh/generate-keys.sh
 	@cd integration/infra && docker compose up -d
 	@bash integration/infra/splunk/wait-for-splunk.sh
+	@bash integration/infra/cloudwatch/wait-for-localstack.sh
 	@bash integration/infra/splunk/create-test-indexes.sh
 	@bash integration/infra/opensearch/create-test-indexes.sh
 	@bash integration/infra/k8s/configure-kubeconfig.sh
@@ -227,7 +228,7 @@ integration/logs: integration/logs/generator integration/logs/ssh integration/lo
 
 integration/logs/cloudwatch:
 	@echo "Sending logs to CloudWatch..."
-	@cd integration/infra/cloudwatch && ./send-logs.sh || true
+	@cd integration/infra/cloudwatch && ./send-logs.sh
 
 integration/logs/generator: integration/start/logs
 	@echo "Deploying sample logs to Splunk and OpenSearch via log-generator..."

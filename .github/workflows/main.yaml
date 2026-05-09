@@ -128,10 +128,9 @@ jobs:
         run: |
           set -euxo pipefail
           echo "Starting integration services via docker-compose"
-          make integration/start
-          # Wait for services to be ready
           chmod +x integration/infra/splunk/wait-for-splunk.sh
-          ./integration/infra/splunk/wait-for-splunk.sh
+          chmod +x integration/infra/cloudwatch/wait-for-localstack.sh
+          make integration/start
 
       - name: Build binary
         run: make build
