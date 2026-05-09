@@ -227,7 +227,7 @@ integration/logs: integration/logs/generator integration/logs/ssh integration/lo
 
 integration/logs/cloudwatch:
 	@echo "Sending logs to CloudWatch..."
-	@cd integration/infra/cloudwatch && ./send-logs.sh
+	@cd integration/infra/cloudwatch && ./send-logs.sh || true
 
 integration/logs/generator: integration/start/logs
 	@echo "Deploying sample logs to Splunk and OpenSearch via log-generator..."
