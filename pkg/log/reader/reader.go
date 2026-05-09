@@ -402,6 +402,18 @@ func parseTimestamp(v interface{}) (time.Time, error) {
 	case string:
 		parsed, err = time.Parse(ty.Format, t)
 		if err != nil {
+			parsed, err = time.Parse(time.RFC3339Nano, t)
+		}
+		if err != nil {
+			parsed, err = time.Parse(time.RFC3339, t)
+		}
+		if err != nil {
+			parsed, err = time.ParseInLocation("2006-01-02T15:04:05.999999999", t, time.UTC)
+		}
+		if err != nil {
+			parsed, err = time.ParseInLocation("2006-01-02T15:04:05", t, time.UTC)
+		}
+		if err != nil {
 			parsed, err = time.ParseInLocation("2006-01-02 15:04:05.000", t, time.Local)
 		}
 		if err != nil {

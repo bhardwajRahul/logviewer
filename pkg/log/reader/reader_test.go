@@ -482,6 +482,33 @@ func TestParseTimestamp(t *testing.T) {
 		assert.Equal(t, 15, ts.Day())
 	})
 
+	t.Run("Parses RFC3339Nano format (Docker timestamps)", func(t *testing.T) {
+		ts, err := parseTimestamp("2026-05-09T19:55:26.055134611Z")
+		require.NoError(t, err)
+		assert.Equal(t, 2026, ts.Year())
+		assert.Equal(t, 19, ts.Hour())
+		assert.Equal(t, 55, ts.Minute())
+		assert.Equal(t, 26, ts.Second())
+	})
+
+	t.Run("Parses ISO 8601 with T separator and no timezone (headscale)", func(t *testing.T) {
+		ts, err := parseTimestamp("2026-05-09T19:55:26")
+		require.NoError(t, err)
+		assert.Equal(t, 2026, ts.Year())
+		assert.Equal(t, 19, ts.Hour())
+		assert.Equal(t, 55, ts.Minute())
+		assert.Equal(t, 26, ts.Second())
+	})
+
+	t.Run("Parses ISO 8601 with T separator, fractional seconds, no timezone", func(t *testing.T) {
+		ts, err := parseTimestamp("2026-05-09T19:55:26.055")
+		require.NoError(t, err)
+		assert.Equal(t, 2026, ts.Year())
+		assert.Equal(t, 19, ts.Hour())
+		assert.Equal(t, 55, ts.Minute())
+		assert.Equal(t, 26, ts.Second())
+	})
+
 	t.Run("Parses local time format", func(t *testing.T) {
 		ts, err := parseTimestamp("2024-01-15 10:30:45.123")
 		require.NoError(t, err)
